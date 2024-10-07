@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Simulation - Enter PIN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>ATM Simulation</h1>
+    <div id="output">Enter your PIN:</div>
+    <input type="password" id="pinInput" placeholder="Enter your PIN">
+    <button id="submitPin">Submit</button>
+
+    <!-- Audio element for click sound -->
+    <audio id="clickSound" src="click-button-166324.mp3"></audio>
+
+    <script>
+        const correctPin = "1234"; // Set correct PIN
+
+        function playClickSound(callback) {
+            const audio = document.getElementById("clickSound");
+            audio.volume = 1.0; // Set volume to maximum
+            audio.currentTime = 0; // Reset to start
+            audio.play().then(() => {
+                audio.onended = callback; // Call the callback after sound ends
+            }).catch(error => {
+                console.error("Audio playback failed:", error);
+                alert("Failed to play sound. Please check your browser settings.");
+                if (callback) callback(); // Proceed even if sound fails
+            });
+        }
+
+        document.getElementById('submitPin').addEventListener('click', function() {
+            const pinInput = document.getElementById('pinInput').value;
+
+            playClickSound(() => { // Play sound and then check PIN
+                if (pinInput === correctPin) {
+                    window.location.href = 'menu.html'; // Redirect to menu page
+                } else {
+                    document.getElementById('output').innerText = "Invalid PIN! Try again.";
+                    document.getElementById('pinInput').value = ''; // Clear input field
+                }
+            });
+        });
+    </script>
+</body>
+</html>

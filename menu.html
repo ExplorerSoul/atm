@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>ATM Menu</h1>
+    <div class="button-container">
+        <button class="soundButton" data-url="check_balance.html">Check A/C Balance</button>
+        <button class="soundButton" data-url="withdraw.html">Withdraw Money</button>
+        <button class="soundButton" data-url="deposit.html">Deposit Money</button>
+        <button class="soundButton" onclick="exitATM()">EXIT</button> <!-- Exit button -->
+
+        <!-- Audio element for click sound -->
+        <audio id="clickSound" src="click-button-166324.mp3"></audio>
+    </div>
+
+    <script>
+        function playClickSound(callback) {
+            const audio = document.getElementById("clickSound");
+            audio.volume = 1.0; // Set volume to maximum
+            audio.currentTime = 0; // Reset to start
+            audio.play().then(() => {
+                // Wait for the sound to finish playing
+                audio.onended = callback; // Call the callback function after sound ends
+            }).catch(error => {
+                console.error("Audio playback failed:", error);
+                alert("Failed to play sound. Please check your browser settings.");
+                if (callback) callback(); // Proceed even if sound fails
+            });
+        }
+
+        // Add event listeners to all buttons with class 'soundButton'
+        const buttons = document.querySelectorAll('.soundButton');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-url'); // Get URL from data attribute
+                if (url) {
+                    playClickSound(() => {
+                        window.location.href = url; // Redirect after sound plays
+                    });
+                }
+            });
+        });
+
+        function exitATM() {
+            playClickSound(() => { // Play sound and then show alert
+                localStorage.clear(); // Clears all items in localStorage
+                alert("All data has been reset. You will be redirected to the PIN entry page.");
+                
+                // Redirect to the PIN entry page
+                window.location.href = 'index.html'; 
+            });
+        }
+    </script>
+</body>
+</html>

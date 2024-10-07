@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Simulation - Check Balance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        button {
+            display: block; /* Display button as block element */
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px; /* Add space between buttons */
+        }
+        button:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Check A/C Balance</h1>
+    <div id="output"></div>
+
+    <!-- Audio element for click sound -->
+    <audio id="clickSound" src="click-button-166324.mp3"></audio>
+
+    <script>
+        // Initialize balance in localStorage if it doesn't exist
+        if (localStorage.getItem('balance') === null) {
+            localStorage.setItem('balance', '0'); // Initialize to '0' as a string
+        }
+
+        // Function to update and display the current balance
+        function updateBalanceDisplay() {
+            const balance = parseFloat(localStorage.getItem('balance')); // Retrieve and parse as float
+            if (!isNaN(balance)) { // Check if balance is a valid number
+                document.getElementById('output').innerText = `Your balance is $${balance.toFixed(2)}`;
+            } else {
+                document.getElementById('output').innerText = "Error retrieving balance.";
+            }
+        }
+
+        // Initial display of balance
+        updateBalanceDisplay();
+
+        // Play click sound function
+        function playClickSound(callback) {
+            const audio = document.getElementById("clickSound");
+            audio.volume = 1.0; // Set volume to maximum
+            audio.currentTime = 0; // Reset to start
+            audio.play().then(() => {
+                audio.onended = callback; // Call the callback function after sound ends
+            }).catch(error => {
+                console.error("Audio playback failed:", error);
+                if (callback) callback(); // Proceed even if sound fails
+            });
+        }
+
+        // Button to return to menu
+        const backButton = document.createElement('button');
+        backButton.innerText = "Back to Menu";
+        backButton.onclick = function() {
+            playClickSound(() => { // Play sound and then redirect
+                window.location.href = 'menu.html'; // Redirect back to menu
+            });
+        };
+        document.body.appendChild(backButton);
+    </script>
+</body>
+</html>

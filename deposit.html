@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Simulation - Deposit Money</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;  
+            background-color: #f4f4f4;  
+            color: #333;  
+            margin: 0;  
+            padding: 20px;  
+        }  
+        h1 {  
+            text-align: center;  
+        }  
+        input[type="number"], button {  
+            display: block; /* Display buttons as block elements */  
+            width: 100%;  
+            background-color: #3498db;  
+            color: white;  
+            border: none;  
+            border-radius: 5px;  
+            padding: 10px 15px;  
+            cursor: pointer;  
+            font-size: 16px;  
+            margin-top: 10px; /* Add some space between buttons */  
+        }   
+        input[type="number"] { margin-bottom: 10px;} /* Add space below input field */   
+        button:hover { background-color: #2980b9;} /* Darker blue on hover */   
+    </style>   
+</head>   
+<body>   
+   <h1>Deposit Money</h1>   
+
+   <input type="number" id="amount" placeholder="Enter amount to deposit" />
+   <div id="message"></div>
+
+   <button id="depositBtn">Deposit</button>
+
+   <!-- Audio element for click sound -->
+   <audio id="clickSound" src="click-button-166324.mp3"></audio>
+
+   <script>   
+       // Initialize balance in localStorage if it doesn't exist
+       if (localStorage.getItem('balance') === null) {
+           localStorage.setItem('balance', '0');
+       }
+
+       document.getElementById('depositBtn').addEventListener('click', function() {   
+           const amount = parseFloat(document.getElementById('amount').value);   
+
+           // Play click sound
+           playClickSound();
+
+           // Disable the button immediately after click
+           this.disabled = true;
+
+           if (amount <= 0) {   
+               document.getElementById('message').innerText = "Invalid amount!";   
+               setTimeout(() => {
+                   this.disabled = false; // Re-enable button after showing message
+               }, 2000);
+           } else {   
+               let balance = parseFloat(localStorage.getItem('balance')); // Get current balance from localStorage
+               balance += amount; // Add amount to balance
+               localStorage.setItem('balance', balance.toString()); // Update balance in localStorage
+               document.getElementById('message').innerText = `Deposit of $${amount} successful!`;   
+
+               // Redirect back to menu after a short delay
+               setTimeout(() => { window.location.href = 'menu.html'; }, 2000); // Redirect after 2 seconds
+           }   
+       });   
+
+       function playClickSound() {
+           const audio = document.getElementById("clickSound");
+           audio.volume = 1.0; // Set volume to maximum
+           audio.currentTime = 0; // Reset to start
+           audio.play().catch(error => {
+               console.error("Audio playback failed:", error);
+           });
+       }
+   </script>
+
+</body>   
+</html>
